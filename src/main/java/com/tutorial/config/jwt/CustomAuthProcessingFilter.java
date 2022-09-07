@@ -21,15 +21,15 @@ import com.tutorial.config.provide.CustomAuthToken;
 import com.tutorial.dto.UserDTO;
 import com.tutorial.utils.JsonUtils;
 
-/**
- * Abstract processor of browser-based HTTP-based authentication requests. json web token on submit singin
- */
 public class CustomAuthProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     private final Logger logger = LoggerFactory.getLogger(CustomAuthProcessingFilter.class);
 
-    public CustomAuthProcessingFilter(RequestMatcher requestMatcher, AuthenticationManager authManager) {
+    private final JsonUtils jsonUtils;
+
+    public CustomAuthProcessingFilter(RequestMatcher requestMatcher, AuthenticationManager authManager, JsonUtils jsonUtils) {
         super(requestMatcher);
+        this.jsonUtils = jsonUtils;
         setAuthenticationManager(authManager);
     }
 
@@ -63,7 +63,7 @@ public class CustomAuthProcessingFilter extends AbstractAuthenticationProcessing
     public CustomAuthToken getAuthRequest(HttpServletRequest request) {
         logger.debug("CustomAuthProcessingFilter.getAuthRequest {}", request);
 
-        Optional<UserDTO> userDTOOpt = JsonUtils.servletRequestToObject(request, UserDTO.class);
+        Optional<UserDTO> userDTOOpt = jsonUtils.servletRequestToObject(request, UserDTO.class);
         if (!userDTOOpt.isPresent()) {
             return new CustomAuthToken(StringUtils.EMPTY, StringUtils.EMPTY, new UserDTO());
         }

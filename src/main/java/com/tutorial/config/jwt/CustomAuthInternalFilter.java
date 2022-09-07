@@ -23,12 +23,16 @@ import com.tutorial.constant.Role;
 import com.tutorial.dto.UserDTO;
 import com.tutorial.utils.JsonUtils;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class CustomAuthInternalFilter extends OncePerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(CustomAuthInternalFilter.class);
 
-    private String clientId = "clientId";
+    private final JsonUtils jsonUtils;
 
+    private String clientId = "clientId";
     private String secretKey = "secretKey";
 
     @Override
@@ -43,7 +47,7 @@ public class CustomAuthInternalFilter extends OncePerRequestFilter {
         String queryString = request.getQueryString();
         logger.debug("CustomAuthInternalFilter doFilterInternal URL: {}?{}", url, queryString);
 
-        Optional<UserDTO> userDTOOpt = JsonUtils.servletRequestToObject(request, UserDTO.class);
+        Optional<UserDTO> userDTOOpt = jsonUtils.servletRequestToObject(request, UserDTO.class);
         if (userDTOOpt.isPresent() && clientId.equals(userDTOOpt.get().getClientId())
                 && secretKey.equals(userDTOOpt.get().getSecretKey())) {
             Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_" + Role.SYSTEM_MANAGER.name()));

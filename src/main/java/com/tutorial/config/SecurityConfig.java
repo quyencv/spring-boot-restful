@@ -2,7 +2,6 @@ package com.tutorial.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,6 +28,9 @@ import com.tutorial.config.provide.CustomHttpConfigurer;
 import com.tutorial.constant.Role;
 import com.tutorial.constant.UrlPathConstant;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -39,23 +41,17 @@ public class SecurityConfig {
     private static final ClearSiteDataHeaderWriter.Directive[] SOURCE = { Directive.CACHE, Directive.COOKIES,
             Directive.STORAGE, Directive.EXECUTION_CONTEXTS };
 
-    @Autowired
-    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-    
-    @Autowired
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
-    
-    @Autowired
-    private CustomAuthEntryPoint customAuthEntryPoint;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-    @Autowired
-    private CustomAuthJWTFilter customAuthJWTFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    @Autowired
-    private CustomAuthInternalFilter customAuthInternalFilter;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
-    @Autowired
-    private CustomHttpConfigurer customHttpConfigurer;
+    private final CustomAuthJWTFilter customAuthJWTFilter;
+
+    private final CustomAuthInternalFilter customAuthInternalFilter;
+
+    private final CustomHttpConfigurer customHttpConfigurer;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

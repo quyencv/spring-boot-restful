@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,13 +22,15 @@ import org.springframework.stereotype.Component;
 import com.tutorial.dto.UserDTO;
 import com.tutorial.service.UserService;
 
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class CustomAuthProvider implements AuthenticationProvider {
 
     private final Logger logger = LoggerFactory.getLogger(CustomAuthProvider.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

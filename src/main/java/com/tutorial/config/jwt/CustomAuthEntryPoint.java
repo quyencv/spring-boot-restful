@@ -11,28 +11,26 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * this handles issues like when a user tries to access a resource without appropriate authentication elements.
- */
+import lombok.AllArgsConstructor;
+
 @Component
+@AllArgsConstructor
 public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
     private final Logger logger = LoggerFactory.getLogger(CustomAuthEntryPoint.class);
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
 
-        logger.debug("CustomAuthEntryPoint.commence request: {}", request);
+        logger.debug("CustomAuthEntryPoint.commence request: {}", request.getRequestURI());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         Map<String, Object> responseMapValue = new HashMap<>();

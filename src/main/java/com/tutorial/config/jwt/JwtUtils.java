@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,10 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
@@ -41,17 +42,15 @@ public class JwtUtils {
 
     public static final long EXPIRATION_TIME = 1 * TimeUnit.DAYS.toMillis(1); // 1 day
 
-    private static final String JWT_SECRET = "ManageItemASecretKey";
+    private static final String JWT_SECRET = "SecretKey";
 
     public static final String TOKEN_PREFIX = "Bearer";
 
     public static final String HEADER_STRING = "Authorization";
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private CustomAuthProvider customAuthProvider;
+    private final CustomAuthProvider customAuthProvider;
 
     public void addAuthentication(HttpServletResponse res, String username) {
         String jwt = generateToken(username, EXPIRATION_TIME);
